@@ -1,0 +1,23 @@
+.home{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding:30px;
+}
+
+.userInfo{
+    display: flex;
+    flex-direction: row;
+    gap:10px;
+}
+
+.button{
+    height:50px;
+    width:100px;
+    border:none;
+    background-color: white;
+}
+
+p{
+    font-weight: bolder;
+}
