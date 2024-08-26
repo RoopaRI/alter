@@ -21,9 +21,8 @@
     padding: 10px;
 }
 
-.quill-container {
-    display: flex;
-    flex-direction: column-reverse; 
+.comment-box .quill-container {
+    border:none
 }
 
 .ql-toolbar {
