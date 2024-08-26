@@ -21,63 +21,31 @@
     padding: 10px;
 }
 
-.input{
-    border:none;
-    outline:none;
-    width:90%;
-    padding:0 20px;
-    flex-grow: 1;
-    
-}
-
-
-.control-section{
-    display:flex;
-    justify-content: space-between;
-    margin:20px;
-}
-
-.controls{
+.quill-container {
     display: flex;
-    gap:20px;
+    flex-direction: column-reverse; 
 }
 
-.submit-btn{
+.ql-toolbar {
+    order: 2; /* Place toolbar after the content */
+}
+
+.ql-container {
+    order: 1; /* Place content before the toolbar */
+}
+
+hr{
+    border-top: 1.5px solid black;
+    margin: 10px 0;
+}
+
+.ql-send::before {
+    content: 'Send';
+    font-size: 14px;
+    padding: 5px;
+    cursor: pointer;
     color:white;
     background-color: black;
     border-radius: 5px;
-    height:23px;
-    width:53px;
-    cursor:pointer;
-}
-
-.divider{
-    border-top: 1.5px solid black;
-    margin: 10px 20px;
-}
-
-
-.underline-btn,
-.bold-btn,
-.italic-btn,
-.link-btn {
-    text-decoration: none;
-    position: relative;
-    border:none;
-    background: none;
-    cursor: pointer;
-    font-size: 16px;
-    color:gray
-}
-
-.underline-btn::after {
-    content: '';
-    display: block;
-    width: 100%;
-    height: 2px;
-    background-color: gray;
-    position: absolute;
-    bottom: -2px;
-    left: 0;
 }
 
