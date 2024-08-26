@@ -22,8 +22,23 @@ export default function CommentBox() {
     const handleSubmit = () => {
         if (quill) {
             const newComment = quill.root.innerHTML; // Get comment from Quill editor
-            if (newComment.trim()) { // Only add non-empty comments
-                setComments(prevComments => [...prevComments, newComment]); // Update state with the new comment
+            const username = localStorage.getItem('username'); // Fetch user details from localStorage
+            const profilePic = localStorage.getItem('profilePic'); // Fetch user details from localStorage
+
+            if (newComment.trim() && username) { // Only add non-empty comments
+                setComments(prevComments => [
+                    ...prevComments,
+                    {
+                        text: newComment,
+                        profilePicture: profilePic,
+                        name: username,
+                        reactions: {
+                            like: 0,
+                            love: 3,
+                            haha: 0
+                        }
+                    }
+                ]); // Update state with the new comment
                 quill.setText(''); // Clear the editor
             }
         }
@@ -52,6 +67,14 @@ export default function CommentBox() {
         input.click();
     };
 
+    const handleReaction = (index, reactionType) => {
+        setComments(prevComments => {
+            const newComments = [...prevComments];
+            newComments[index].reactions[reactionType] += 1;
+            return newComments;
+        });
+    };
+
     useEffect(() => {
         if (quill) {
             const toolbar = quill.getModule('toolbar');
@@ -74,9 +97,24 @@ export default function CommentBox() {
                 <div ref={quillRef} />
             </div>
             <div className="comments-list">
-                {comments.length > 0 ? comments.map((c, index) => (
+                {comments.length > 0 ? comments.map((comment, index) => (
                     <div key={index} className="comment">
-                        <div dangerouslySetInnerHTML={{ __html: c }} /> {/* Render comment */}
+                        <div className="comment-header">
+                            <img src={comment.profilePicture} alt={`${comment.name}'s profile`} className="profile-picture" />
+                            <span className="commenter-name">{comment.name}</span>
+                        </div>
+                        <div dangerouslySetInnerHTML={{ __html: comment.text }} /> {/* Render comment */}
+                        <div className="reactions">
+                            <button className="reaction-button" onClick={() => handleReaction(index, 'like')}>
+                                👍 {comment.reactions.like}
+                            </button>
+                            <button className="reaction-button" onClick={() => handleReaction(index, 'love')}>
+                                ❤️ {comment.reactions.love}
+                            </button>
+                            <button className="reaction-button" onClick={() => handleReaction(index, 'haha')}>
+                                😂 {comment.reactions.haha}
+                            </button>
+                        </div>
                     </div>
                 )) : <p>No comments yet.</p>}
             </div>

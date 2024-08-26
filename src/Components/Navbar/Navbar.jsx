@@ -14,7 +14,7 @@ export default function Navbar(){
         <div className='navbar'>
             <div className='userInfo'>
                 {profilePic && <img src={profilePic} alt="Profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />}
-                <p>{username}</p>
+                <h4>{username}</h4>
             </div>
            
             <button className='button' onClick={handleLogout}>Logout</button>

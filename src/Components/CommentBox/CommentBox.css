@@ -57,3 +57,51 @@ hr{
 .ql-custom-send:hover {
     background-color: #333; /* Darker shade on hover */
 }
+
+.comment {
+    border: none;
+    margin: 0 20px;
+    padding: 20px;
+}
+
+.comment-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.profile-picture {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.commenter-name {
+    font-weight: bold;
+}
+
+p{
+    margin: 0;
+    text-align: start;
+    color:gray
+}
+
+.reactions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.reaction-button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.reaction-button:hover {
+    color: #007bff;
+}
