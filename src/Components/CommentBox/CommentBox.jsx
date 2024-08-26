@@ -4,29 +4,32 @@ import './CommentBox.css';
 import 'quill/dist/quill.snow.css';
 
 export default function CommentBox() {
-    const [comment, setComment] = useState('');
+    const [comments, setComments] = useState([]);
     const { quill, quillRef } = useQuill({
         modules: {
             toolbar: {
                 container: [
                     [{ 'bold': true }, { 'italic': true }, { 'underline': true }],
-                    ['image'], // Added image button to toolbar
-                    ['send']  //Added send button
+                    ['image'], // Image button
+                    ['customSend'] // Placeholder for custom button
                 ]
             }
         },
         placeholder: 'Write a comment...'
     });
 
+    // Define the submit handler
     const handleSubmit = () => {
-        console.log("Comment:", comment);
-
         if (quill) {
-            quill.setText('');
+            const newComment = quill.root.innerHTML; // Get comment from Quill editor
+            if (newComment.trim()) { // Only add non-empty comments
+                setComments(prevComments => [...prevComments, newComment]); // Update state with the new comment
+                quill.setText(''); // Clear the editor
+            }
         }
-        setComment('');
     };
 
+    // Define the image upload handler
     const handleImageUpload = () => {
         if (!quill) return;
 
@@ -51,12 +54,17 @@ export default function CommentBox() {
 
     useEffect(() => {
         if (quill) {
-            quill.getModule('toolbar').addHandler('image', handleImageUpload);
-            quill.getModule('toolbar').addHandler('send', handleSubmit);
+            const toolbar = quill.getModule('toolbar');
+            toolbar.addHandler('image', handleImageUpload);
 
-            quill.on('text-change', () => {
-                setComment(quill.root.innerHTML);
-            });
+            // Add custom send button with className
+            const customButton = document.createElement('button');
+            customButton.innerHTML = 'Send';
+            customButton.className = 'ql-custom-send'; // Apply custom styles
+            customButton.onclick = handleSubmit;
+            toolbar.container.appendChild(customButton);
+
+            console.log("Quill initialized with toolbar handlers");
         }
     }, [quill]);
 
@@ -64,6 +72,13 @@ export default function CommentBox() {
         <div className='comment-section'>
             <div className="comment-box">
                 <div ref={quillRef} />
+            </div>
+            <div className="comments-list">
+                {comments.length > 0 ? comments.map((c, index) => (
+                    <div key={index} className="comment">
+                        <div dangerouslySetInnerHTML={{ __html: c }} /> {/* Render comment */}
+                    </div>
+                )) : <p>No comments yet.</p>}
             </div>
         </div>
     );
