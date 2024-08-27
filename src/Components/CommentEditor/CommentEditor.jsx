@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { useQuill } from 'react-quilljs';
 import 'quill/dist/quill.snow.css';
 import './CommentEditor.css';
-import {imageDb} from '../../googleSignIn/config';
 
 const CommentEditor = ({ onSubmit }) => {
     const { quill, quillRef } = useQuill({
@@ -17,7 +16,8 @@ const CommentEditor = ({ onSubmit }) => {
         },
         placeholder: 'Write a comment...'
     });
-    const customButtonRef = useRef(null); // Ref to track the custom button
+
+    const customButtonRef = useRef(null);
 
     const handleImageUpload = () => {
         if (!quill) return;
@@ -35,7 +35,7 @@ const CommentEditor = ({ onSubmit }) => {
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
-                        const maxWidth = 150; // Set the max width for the thumbnail
+                        const maxWidth = 150;
                         const scaleSize = maxWidth / img.width;
                         canvas.width = maxWidth;
                         canvas.height = img.height * scaleSize;
@@ -57,23 +57,18 @@ const CommentEditor = ({ onSubmit }) => {
         if (quill) {
             const toolbar = quill.getModule('toolbar');
 
-            // Clean up any existing custom buttons
             if (customButtonRef.current) {
                 toolbar.container.removeChild(customButtonRef.current);
             }
 
-            // Add custom send button with className
             const customButton = document.createElement('button');
             customButton.innerHTML = 'Send';
-            customButton.className = 'ql-custom-send'; // Apply custom styles
-            customButton.onclick = onSubmit;
+            customButton.className = 'ql-custom-send';
+            customButton.onclick = () => onSubmit(quill); // Pass quill instance to onSubmit
             toolbar.container.appendChild(customButton);
-            customButtonRef.current = customButton; // Update ref
+            customButtonRef.current = customButton;
 
-            // Add image upload handler
             toolbar.addHandler('image', handleImageUpload);
-
-            console.log("Quill initialized with toolbar handlers");
         }
     }, [quill, onSubmit]);
 
