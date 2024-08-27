@@ -38,25 +38,53 @@ p{
     align-items: end;
 }
 
-
-
-.comment-text {
-    max-height: 5em; /* Adjust this value based on your line height */
-    overflow: hidden;
-    position: relative;
-}
-
-.comment-text.expanded {
-    max-height: none;
-}
-
-.show-more, .show-less {
+.reply-button{
+    background-color: white;
+    border: none;
+    display: flex;
+    align-items: end;
     cursor: pointer;
-    color: #007bff;
-    text-decoration: underline;
 }
 
-.show-more-less{
-    color:blue;
-    font-size: small;
+.submit-btn{
+    background-color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.textarea{
+    min-width: 80%;
+    min-height: 120px
+}
+
+/* Comment.css */
+
+.comment {
+    margin-bottom: 10px;
+}
+
+.comment.level-1 {
+    padding-left: 20px;
+}
+
+.comment.level-2 {
+    padding-left: 40px;
+}
+
+.reply-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.reply-input {
+    margin-top: 10px;
+}
+
+.show-more-less {
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
 }

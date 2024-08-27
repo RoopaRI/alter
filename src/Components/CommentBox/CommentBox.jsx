@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import CommentEditor from '../CommentEditor/CommentEditor';
 import CommentList from '../CommentList/CommentList';
 import Pagination from '../Pagination/Pagination';
 import './CommentBox.css';
 import { toast } from 'react-toastify'; // Import the toastify library
-import { db } from '../../googleSignIn/config'; // Import Firestore
-import { collection, addDoc, query, onSnapshot, orderBy } from 'firebase/firestore';
 
 export default function CommentBox() {
     const [comments, setComments] = useState([]);
@@ -14,22 +12,7 @@ export default function CommentBox() {
 
     const totalPages = Math.ceil(comments.length / commentsPerPage);
 
-    useEffect(() => {
-        // Fetch comments from Firestore when component mounts
-        const q = query(collection(db, 'comments'), orderBy('timestamp', 'desc'));
-        const unsubscribe = onSnapshot(q, (querySnapshot) => {
-            const fetchedComments = [];
-            querySnapshot.forEach((doc) => {
-                fetchedComments.push(doc.data());
-            });
-            setComments(fetchedComments);
-        });
-
-        // Clean up the listener on component unmount
-        return () => unsubscribe();
-    }, []);
-
-    const handleSubmit = async (quill) => {
+    const handleSubmit = (quill) => {
         const text = quill.getText().trim();
 
         if (text.length === 0) {
@@ -42,8 +25,10 @@ export default function CommentBox() {
         const profilePic = localStorage.getItem('profilePic');
 
         if (username) {
-            try {
-                await addDoc(collection(db, 'comments'), {
+            setComments(prevComments => [
+                ...prevComments,
+                {
+                    id: Date.now(), // Unique ID for each comment
                     text: newComment,
                     profilePicture: profilePic,
                     name: username,
@@ -52,13 +37,12 @@ export default function CommentBox() {
                         like: 0,
                         love: 0,
                         haha: 0
-                    }
-                });
-                quill.root.innerHTML = ''; // Clear the editor
-                toast.success('Comment added successfully!');
-            } catch (error) {
-                toast.error('Failed to add comment. Please try again.');
-            }
+                    },
+                    replies: [] // Initialize replies as an empty array
+                }
+            ]);
+            quill.root.innerHTML = ''; // Clear the editor
+            toast.success('Comment added successfully!');
         } else {
             toast.error('Failed to add comment. Please try again.');
         }
@@ -67,7 +51,29 @@ export default function CommentBox() {
     const handleReaction = (index, reactionType) => {
         setComments(prevComments => {
             const newComments = [...prevComments];
-            newComments[index].reactions[reactionType] += 1;
+            const comment = newComments[index];
+            comment.reactions[reactionType] += 1;
+            return newComments;
+        });
+    };
+
+    const handleReply = (commentIndex, replyText) => {
+        setComments(prevComments => {
+            const newComments = [...prevComments];
+            const comment = newComments[commentIndex];
+            comment.replies.push({
+                id: Date.now(), // Unique ID for each reply
+                text: replyText,
+                profilePicture: localStorage.getItem('profilePic'),
+                name: localStorage.getItem('username'),
+                timestamp: new Date().toISOString(),
+                reactions: {
+                    like: 0,
+                    love: 0,
+                    haha: 0
+                },
+                replies: [] // Initialize nested replies as an empty array
+            });
             return newComments;
         });
     };
@@ -83,7 +89,7 @@ export default function CommentBox() {
     return (
         <div className='comment-section'>
             <CommentEditor onSubmit={handleSubmit} />
-            <CommentList comments={currentComments} onReaction={handleReaction} />
+            <CommentList comments={currentComments} onReaction={handleReaction} onReply={handleReply} />
             <Pagination 
                 currentPage={currentPage} 
                 totalPages={totalPages} 

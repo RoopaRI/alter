@@ -2,24 +2,37 @@ import React, { useState } from 'react';
 import Reactions from '../Reactions/Reactions';
 import './Comment.css';
 
-const Comment = ({ comment, index, onReaction }) => {
+const Comment = ({ comment, index, onReaction, onReply, level = 0 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
-    const timeAgo = getTimeAgo(comment.timestamp);
+    const [showReplyInput, setShowReplyInput] = useState(false);
+    const [replyText, setReplyText] = useState('');
 
-    const toggleExpand = () => {
-        setIsExpanded(!isExpanded);
+    const handleReplyChange = (e) => setReplyText(e.target.value);
+
+    const handleReplySubmit = () => {
+        if (replyText.trim()) {
+            onReply(index, replyText);
+            setReplyText('');
+            setShowReplyInput(false);
+        }
     };
 
+    const toggleExpand = () => setIsExpanded(!isExpanded);
+
+    const timeAgo = getTimeAgo(comment.timestamp);
+
     return (
-        <div className="comment">
+        <div className={`comment level-${level}`}>
             <div className="comment-header">
                 <img src={comment.profilePicture} alt={`${comment.name}'s profile`} className="profile-picture" />
                 <span className="commenter-name">{comment.name}</span>
             </div>
             <div className={`comment-text ${isExpanded ? 'expanded' : ''}`} dangerouslySetInnerHTML={{ __html: comment.text }} />
-            <span className="show-more-less" onClick={toggleExpand}>
-                {isExpanded ? 'Show less' : 'Show more'}
-            </span>
+            {comment.text.split('\n').length > 5 && (
+                <span className="show-more-less" onClick={toggleExpand}>
+                    {isExpanded ? 'Show less' : 'Show more'}
+                </span>
+            )}
             <div className="reaction-time">
                 <Reactions 
                     reactions={comment.reactions} 
@@ -27,7 +40,40 @@ const Comment = ({ comment, index, onReaction }) => {
                 />
                 <span className="comment-time">{timeAgo}</span>
             </div>
-            
+            <div className="reply-section">
+                {comment.replies.length > 0 && (
+                    <div className="replies">
+                        {comment.replies.map((reply, replyIndex) => (
+                            <Comment 
+                                key={reply.id} 
+                                comment={reply} 
+                                index={replyIndex} 
+                                onReaction={onReaction} 
+                                onReply={onReply}
+                                level={level + 1} // Increment level for nested replies
+                            />
+                        ))}
+                    </div>
+                )}
+                {level === 0 && comment.replies.length === 0 && ( // Only show reply button for top-level comments
+                    <button 
+                        className="reply-button" 
+                        onClick={() => setShowReplyInput(!showReplyInput)}
+                    >
+                        Reply
+                    </button>
+                )}
+                {showReplyInput && (
+                    <div className="reply-input">
+                        <textarea 
+                            value={replyText} 
+                            onChange={handleReplyChange} 
+                            placeholder="Write a reply..."
+                        />
+                        <button onClick={handleReplySubmit}>Submit Reply</button>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };
