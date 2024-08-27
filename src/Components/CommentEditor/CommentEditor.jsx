@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { useQuill } from 'react-quilljs';
 import 'quill/dist/quill.snow.css';
-import './CommentEditor.css'; // Create and use this CSS file for styling if needed
+import './CommentEditor.css';
+import {imageDb} from '../../googleSignIn/config';
 
 const CommentEditor = ({ onSubmit }) => {
     const { quill, quillRef } = useQuill({
@@ -29,10 +30,22 @@ const CommentEditor = ({ onSubmit }) => {
             if (file) {
                 const reader = new FileReader();
                 reader.onload = () => {
-                    const range = quill.getSelection();
-                    if (range) {
-                        quill.insertEmbed(range.index, 'image', reader.result);
-                    }
+                    const img = new Image();
+                    img.src = reader.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const maxWidth = 150; // Set the max width for the thumbnail
+                        const scaleSize = maxWidth / img.width;
+                        canvas.width = maxWidth;
+                        canvas.height = img.height * scaleSize;
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        const thumbnail = canvas.toDataURL('image/png');
+                        const range = quill.getSelection();
+                        if (range) {
+                            quill.insertEmbed(range.index, 'image', thumbnail);
+                        }
+                    };
                 };
                 reader.readAsDataURL(file);
             }

@@ -14,6 +14,7 @@
 .button{
     height:50px;
     width:100px;
+    font-weight: bolder;
     border:none;
     background-color: white;
 }
@@ -23,4 +24,8 @@ h4{
     display: flex;
     position: relative;
     top:10px;
+}
+
+.button:hover {
+    color: blue; /* Darker shade on hover */
 }
