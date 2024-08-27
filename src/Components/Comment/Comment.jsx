@@ -28,7 +28,7 @@ const Comment = ({ comment, index, onReaction, onReply, level = 0 }) => {
                 <span className="commenter-name">{comment.name}</span>
             </div>
             <div className={`comment-text ${isExpanded ? 'expanded' : ''}`} dangerouslySetInnerHTML={{ __html: comment.text }} />
-            {comment.text.split('\n').length > 5 && (
+            {comment.text.split('\n').length > 5 && level < 2 && (
                 <span className="show-more-less" onClick={toggleExpand}>
                     {isExpanded ? 'Show less' : 'Show more'}
                 </span>
@@ -38,6 +38,14 @@ const Comment = ({ comment, index, onReaction, onReply, level = 0 }) => {
                     reactions={comment.reactions} 
                     onReaction={(reactionType) => onReaction(index, reactionType)}
                 />
+                {(level < 2 && comment.replies.length === 0) && ( // Show reply button only for top-level and second-level comments
+                    <button 
+                        className="reply-btn" 
+                        onClick={() => setShowReplyInput(!showReplyInput)}
+                    >
+                        Reply
+                    </button>
+                )}
                 <span className="comment-time">{timeAgo}</span>
             </div>
             <div className="reply-section">
@@ -55,22 +63,16 @@ const Comment = ({ comment, index, onReaction, onReply, level = 0 }) => {
                         ))}
                     </div>
                 )}
-                {level === 0 && comment.replies.length === 0 && ( // Only show reply button for top-level comments
-                    <button 
-                        className="reply-button" 
-                        onClick={() => setShowReplyInput(!showReplyInput)}
-                    >
-                        Reply
-                    </button>
-                )}
+                
                 {showReplyInput && (
                     <div className="reply-input">
                         <textarea 
+                        className='textrea'
                             value={replyText} 
                             onChange={handleReplyChange} 
                             placeholder="Write a reply..."
                         />
-                        <button onClick={handleReplySubmit}>Submit Reply</button>
+                        <button className='submit-btn' onClick={handleReplySubmit}>Submit Reply</button>
                     </div>
                 )}
             </div>

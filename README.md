@@ -1,3 +1,34 @@
+Comment System with Google Authentication and Rich Text Features
+
+Created a dynamic comment system integrated with Google Authentication that allows users to
+post comments with rich text features, attach images, include pagination.
+
+Functionalities
+1. Google Authentication: Integrate Google Authentication to allow users to sign in and
+comment.
+
+2. Comment Input Box:
+    1. Provide options for bold, italic, underline, and hyperlink formatting.
+    2. Allow users to attach image files.
+
+3. Comment Features
+    1. Each comment should display the user’s profile picture, name, and comment
+    text.
+    2. Include reaction buttons and show reaction counts.
+    3. Allow a reply option for each comment, supporting up to two levels of replies.
+    4. Display the comment time (e.g., seconds, minutes, hours, days ago).
+    5. If a comment is longer than 5 lines, provide “show more” and “show less”
+    functionality.
+
+4. Pagination
+    1. Display only 8 comments per page with pagination controls.
+    2. Handle empty state, success, and failure toast messages.
+
+
+Figma file for designs -
+https://www.figma.com/design/4Q01reqMJeXHL8h2I0Qihw/Comment-System?node-id=0-
+1&t=iNvYYsQ8owFkSo2l-1
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

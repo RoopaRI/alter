@@ -38,7 +38,7 @@ p{
     align-items: end;
 }
 
-.reply-button{
+.reply-btn{
     background-color: white;
     border: none;
     display: flex;
@@ -57,34 +57,34 @@ p{
     min-height: 120px
 }
 
-/* Comment.css */
-
-.comment {
-    margin-bottom: 10px;
+.comment-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.comment.level-1 {
-    padding-left: 20px;
-}
-
-.comment.level-2 {
-    padding-left: 40px;
-}
-
-.reply-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-}
-
-.reply-input {
-    margin-top: 10px;
+.comment-text.expanded {
+    white-space: normal;
 }
 
 .show-more-less {
     cursor: pointer;
-    color: blue;
+    color: #007bff;
+    font-size: 14px;
+}
+
+.show-more-less:hover {
     text-decoration: underline;
+}
+
+.textrea{
+    min-width:80%;
+    min-height:120px;
+}
+
+.submit-btn,
+.reply-btn{
+    color:blue;
+    border:none;
+    cursor: pointer;
 }

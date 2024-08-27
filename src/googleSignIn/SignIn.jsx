@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {auth, provider} from './config';
 import {signInWithPopup} from 'firebase/auth';
 import Main from './Main';
+import './SignIn.css';
 
 export default function SignIn(){
     const [value, setValue] = useState('');
@@ -22,7 +23,8 @@ export default function SignIn(){
     return(
         <div>
             {value?<Main/>:
-            <button onClick={handleClick}>SignIn with Google</button>}
+            <button className='btn'
+            onClick={handleClick}>SignIn with Google</button>}
         </div>
     )
 }
