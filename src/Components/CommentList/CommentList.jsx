@@ -1,6 +1,6 @@
 import React from 'react';
 import Comment from '../Comment/Comment';
-import './CommentList.css'; // Create and use this CSS file for styling if needed
+import './CommentList.css';
 
 const CommentList = ({ comments, onReaction }) => {
     return (
@@ -12,7 +12,7 @@ const CommentList = ({ comments, onReaction }) => {
                     index={index} 
                     onReaction={onReaction}
                 />
-            )) : <p>No comments yet.</p>}
+            )) : <p className='default'>No comments yet.</p>}
         </div>
     );
 };

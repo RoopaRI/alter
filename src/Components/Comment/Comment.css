@@ -38,3 +38,25 @@ p{
     align-items: end;
 }
 
+
+
+.comment-text {
+    max-height: 5em; /* Adjust this value based on your line height */
+    overflow: hidden;
+    position: relative;
+}
+
+.comment-text.expanded {
+    max-height: none;
+}
+
+.show-more, .show-less {
+    cursor: pointer;
+    color: #007bff;
+    text-decoration: underline;
+}
+
+.show-more-less{
+    color:blue;
+    font-size: small;
+}

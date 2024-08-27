@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Reactions from '../Reactions/Reactions';
 import './Comment.css';
 
 const Comment = ({ comment, index, onReaction }) => {
+    const [isExpanded, setIsExpanded] = useState(false);
     const timeAgo = getTimeAgo(comment.timestamp);
+
+    const toggleExpand = () => {
+        setIsExpanded(!isExpanded);
+    };
 
     return (
         <div className="comment">
@@ -11,16 +16,17 @@ const Comment = ({ comment, index, onReaction }) => {
                 <img src={comment.profilePicture} alt={`${comment.name}'s profile`} className="profile-picture" />
                 <span className="commenter-name">{comment.name}</span>
             </div>
-            <div dangerouslySetInnerHTML={{ __html: comment.text }} /> {/* Render comment */}
+            <div className={`comment-text ${isExpanded ? 'expanded' : ''}`} dangerouslySetInnerHTML={{ __html: comment.text }} />
+            <span className="show-more-less" onClick={toggleExpand}>
+                {isExpanded ? 'Show less' : 'Show more'}
+            </span>
             <div className="reaction-time">
                 <Reactions 
                     reactions={comment.reactions} 
                     onReaction={(reactionType) => onReaction(index, reactionType)}
                 />
-                
-                <span className="comment-time">{timeAgo}</span> {/* Display time ago */}
+                <span className="comment-time">{timeAgo}</span>
             </div>
-            
             
         </div>
     );
